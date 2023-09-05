@@ -12,7 +12,8 @@ img{
   border-color: #000000 #000000; 
   border-width: 1px;
   border-radius: 10px;
-  margin: 10px;
+  margin-bottom: 5px;
+  margin-top: 30px;
 }
 
 input[type=file] {
