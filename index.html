@@ -16,6 +16,7 @@
 <div ng-app='img2fire'>
   <div ng-controller='base64Ctrl'>
     <div class="container-fluid">
+      <nav class="navbar navbar-default navbar-fixed-bottom">
       <form ng-submit="uploadFile()">
         <label for="images" class="drop-container" id="dropcontainer">
           <span class="drop-title">Drop files here</span>
@@ -24,10 +25,12 @@
         </label>
         <br />
         <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Upload Image</button>
+          <button type="submit" class="btn btn-primary btn-lg btn-block ">Upload Image</button>
           </span>
       </form>
+      </nav>
       <hr />
+      <br>
       <div ng-repeat="img in imgs | toArray | orderBy: '-date'" class="col-xs-12 col-sm-6 col-sm-3">
         <img ng-src="{{img.Banner_Path}}">
         <a class="btn btn-danger btn-block" ng-click="deleteimg(img.$id)">Delete</a>
