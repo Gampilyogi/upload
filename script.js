@@ -48,7 +48,7 @@ img2fire.controller("base64Ctrl", function($scope, $firebaseArray) {
   }
 
   $scope.deleteimg = function(imgid) {
-    var r = confirm("Do you want to remove this image ?");
+    var r = confirm("Yakin Mau Hapus Gambar Ini?");
     if (r == true) {
       $scope.imgs.forEach(function(childSnapshot) {
         if (childSnapshot.$id == imgid) {
