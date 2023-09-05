@@ -1,181 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" >
 <head>
- <title>CRUD Firebase</title>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <title>Upload Slider</title>
+  <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+<link rel='stylesheet' href='https://fezvrasta.github.io/bootstrap-material-design/dist/css/bootstrap-material-design.css'>
+<link rel='stylesheet' href='https://fezvrasta.github.io/bootstrap-material-design/dist/css/ripples.min.css'><link rel="stylesheet" href="./style.css">
 
- <!-- Bootstrap CSS -->
- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" >
- <link rel="stylesheet" type="text/css" href="css/style.css">
- <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
- <script type="text/javascript">
-
-  var config = {
-   apiKey: "AIzaSyDLQPohFVjFaU5GlDgr1f9E3egilZH3pl8",
-   authDomain: "slider-e916b.firebaseapp.com",
-   databaseURL: "https://slider-e916b-default-rtdb.firebaseio.com/",
-   projectId: "slider-e916b",
-   storageBucket: "slider-e916b.appspot.com",
-   messagingSenderId: "379935575263"
-  };
-
-  firebase.initializeApp(config); 
-
- </script>
 </head>
 <body>
- <h1>Firebase JS CRUD</h1>
- <button class="btn btn-primary btnTambahData" data-toggle="modal" onclick="cleardata()" data-target="#exampleModal">Tambah Data</button>
- <table class="table table-striped" id="tbl_list_user">
-  <thead>
-   <tr>
-    <th scope="col">No.</th>
-    <th scope="col">Nama</th>
-    <th scope="col">Email</th>
-    <th scope="col">Alamat</th>
-    <th scope="col">Aksi</th>
-   </tr>
-  </thead>
- </table>
-
-
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-   <div class="modal-content">
-    <div class="modal-header">
-     <h5 class="modal-title" id="exampleModalLabel"></h5>
-     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-     </button>
+<!-- partial:index.partial.html -->
+<div ng-app='img2fire'>
+  <div ng-controller='base64Ctrl'>
+    <div class="container-fluid">
+      <form ng-submit="uploadFile()">
+        <input type="file" name="file" class="inputimg" id="nameImg" accept="image/*">
+        <br />
+        <span class="input-group-btn">
+                <button  type="submit" class="btn btn-block">Upload Image 
+                  <i class="material-icons">send</i>
+                </button>
+          </span>
+      </form>
+      <hr />
+      <div ng-repeat="img in imgs | toArray | orderBy: '-date'" class="col-xs-12 col-sm-6 col-md-3">
+        <img ng-src="{{img.Banner_Path}}">
+        <a class="btn btn-danger btn-block" ng-click="deleteimg(img.$id)">Delete</a>
+      </div>
     </div>
-    <form action="" method="POST" enctype="multipart/form-data">
-     <div class="modal-body">     
-      <input type="hidden" name="id" id="id">
-      <div class="form-group">
-       <label for="nama">Nama</label>
-       <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama" required="true">
-      </div>
-      <div class="form-group">
-       <label for="email">Email</label>
-       <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email" required="true">
-      </div>
-      <div class="form-group">
-       <label for="alamat">Alamat</label>
-       <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Masukkan alamat" required="true">
-      </div>
-     </div>
-
-     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="button" class="btn btn-primary" onclick="tambahData()" data-dismiss="modal">Simpan</button>
-     </div>
-    </form>
-   </div>
   </div>
- </div>
+<!-- partial -->
+  <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+<script src='https://fezvrasta.github.io/bootstrap-material-design/dist/js/material.min.js'></script>
+<script src='https://fezvrasta.github.io/bootstrap-material-design/dist/js/ripples.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.js'></script>
+<script src='https://cdn.firebase.com/js/client/2.2.4/firebase.js'></script>
+<script src='//cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js'></script><script  src="./script.js"></script>
 
- <!-- <script src="js/jquery.js"></script>     -->
-
- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
- <script src="js/jquery.easing.1.3.js"></script>
- <script src="js/bootstrap.min.js"></script>
- <script src="js/hm.js"></script>
-
- <script type="text/javascript">
-  var database = firebase.database();
-  var key = 0;
-
-  database.ref("users").orderByKey().limitToLast(1).on('child_added',function(data) {
-   key = parseInt(data.key, 10);
-   key = key + 1;
-  });
-
-  database.ref('users').on('value', function(snapshot) {
-   var count = 0;
-   if(snapshot.exists()){
-    $("#tbl_list_user tbody").remove(); 
-    var content = '<tbody>';
-    snapshot.forEach(function(data) {
-     count+=1;
-     var val = data.val();
-                 content +='<tr>';
-                 content += '<td>' + count + '</td>';
-                 content += '<td>' + val.username + '</td>';
-                 content += '<td>' + val.email + '</td>';
-                 content += '<td>' + val.address + '</td>';
-                 content += '<td> <button class="btn btn-danger" onclick="hapusData(' + data.key + ')"> Hapus Data </button> <button class="btn btn-primary tampilModalUbah" onclick="setData('+ data.key +')" data-toggle="modal" data-target="#exampleModal">Edit Data</button>  </td>';
-                 content +='</tr>';
-                 key = 0;
-     key = parseInt(data.key, 10);
-     key = key + 1;
-    });
-
-    content += '</tbody>';
-    $('#tbl_list_user').append(content);
-   }else{
-    $("#tbl_list_user tbody").remove(); 
-   }  
-  });
-
-
-  function tambahData(){
-   if($('#exampleModalLabel').text() == "Tambah Data Baru"){
-    if(key == 0){
-     key = 1;
-    }
-
-    database.ref('users/' + key).set({
-     username: $('#nama').val(),
-     email   : $('#email').val(),
-     address : $('#alamat').val()
-    });
-
-    alert("Data Berhasil ditambah");
-   }else if($('#exampleModalLabel').text() == "Ubah Data"){
-    database.ref('users/' + $('#id').val()).update({
-     username: $('#nama').val(),
-     email   : $('#email').val(),
-     address : $('#alamat').val()
-    });
-    alert("Data Berhasil diupdate");
-   }
-  } 
-
-
-  function cleardata(){
-   $('#id').val("");
-   $('#nama').val("");
-   $('#email').val("");
-   $('#alamat').val("");
-  }
-
-
-  function setData(id){
-   $('#exampleModalLabel').html('Ubah Data');   
-   database.ref('users/').child(id).once('value').then( function(snap) {
-       const user = snap.val()
-       $('#id').val(id);
-    $('#nama').val(user.username);
-    $('#email').val(user.email);
-    $('#alamat').val(user.address);
-   });
-  }
-
-
-  function hapusData(id){
-   var answer = confirm("Hapus Data..?");
-   if (answer) {
-       database.ref('users/' + id).remove();
-       alert("Data Berhasil dihapus");
-   }
-  } 
-
-$('.btnTambahData').on('click', function(){
-        $('#exampleModalLabel').html('Tambah Data Baru');
-    });
-
- </script>
 </body>
 </html>
